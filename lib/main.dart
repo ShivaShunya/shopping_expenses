@@ -65,11 +65,45 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _deleteTransactionEntry(int transactionIndex) {
+    showAlertDialog(context, transactionIndex);
+  }
+
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,
       builder: (_) {
         return NewTransaction(_onAddNewTransaction);
+      },
+    );
+  }
+
+  void showAlertDialog(BuildContext context, int transactionIndex) {
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: Text("Delete Transaction Alert"),
+          content: Text("Please press 'Continue' to confirm..."),
+          actions: [
+            FlatButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+            FlatButton(
+              child: Text("Continue"),
+              onPressed: () {
+                setState(() {
+                  _transactions.removeAt(transactionIndex);
+                });
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }
@@ -92,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransantions),
-            TransactionList(_transactions),
+            TransactionList(_transactions, _deleteTransactionEntry),
           ],
         ),
       ),

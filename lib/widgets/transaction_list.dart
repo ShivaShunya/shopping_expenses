@@ -4,15 +4,16 @@ import 'package:intl/intl.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
-  final List<Transaction> _transactions;
+  final List<Transaction> transactions;
+  final Function deleteTransactionEntry;
 
-  TransactionList(this._transactions);
+  TransactionList(this.transactions, this.deleteTransactionEntry);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 360,
-      child: _transactions.isEmpty
+      child: transactions.isEmpty
           ? Column(
               children: <Widget>[
                 SizedBox(
@@ -35,54 +36,38 @@ class TransactionList extends StatelessWidget {
               ],
             )
           : ListView.builder(
-              itemCount: _transactions.length,
+              itemCount: transactions.length,
               itemBuilder: (itemContext, index) {
                 return Card(
                   color: Colors.white24,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 15,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.brown,
-                              width: 2,
-                            ),
-                          ),
-                          padding: EdgeInsets.all(5),
-                          child: Text(
-                            _transactions[index].amount.toStringAsFixed(2) +
-                                ' Rs/-',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.red,
-                            ),
-                          ),
+                  elevation: 1,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 5,
+                  ),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: FittedBox(
+                          child: Text('${transactions[index].amount} Rs/-'),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              _transactions[index].title,
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              DateFormat().format(_transactions[index].date),
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
+                    ),
+                    title: Text(
+                      transactions[index].title,
+                      style: Theme.of(context).textTheme.title,
+                    ),
+                    subtitle: Text(
+                      DateFormat.yMMMd().format(transactions[index].date),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      color: Colors.blueGrey,
+                      onPressed: () {
+                        deleteTransactionEntry(index);
+                      },
                     ),
                   ),
                 );
