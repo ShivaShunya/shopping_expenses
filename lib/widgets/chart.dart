@@ -40,11 +40,12 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 7,
+      elevation: 10,
       margin: EdgeInsets.all(20),
       child: Container(
+        height: 170,
         padding: EdgeInsets.all(10),
-        color: Colors.lightGreen,
+        color: Colors.green[300],
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: groupedTransactionValues.map((value) {

@@ -54,7 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onAddNewTransaction(String titleEntered, double amountEntered) {
     setState(() {
-      _transactions.add(
+      _transactions.insert(
+        0,
         Transaction(
           id: _transactions.length + 1,
           title: titleEntered,
@@ -112,7 +113,22 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shopping & Expenses'),
+        title: Container(
+          color: Colors.pink,
+          height: 40,
+          width: 250,
+          child: Card(
+            color: Colors.pink,
+            elevation: 5,
+            child: Text(
+              'Shopping & Expenses',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
@@ -126,7 +142,8 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransantions),
-            TransactionList(_transactions, _deleteTransactionEntry),
+            TransactionList(
+                _transactions, _deleteTransactionEntry),
           ],
         ),
       ),

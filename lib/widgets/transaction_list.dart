@@ -39,19 +39,38 @@ class TransactionList extends StatelessWidget {
               itemCount: transactions.length,
               itemBuilder: (itemContext, index) {
                 return Card(
-                  color: Colors.white24,
-                  elevation: 1,
+                  color: Colors.pink[100],
+                  elevation: 3,
                   margin: EdgeInsets.symmetric(
                     horizontal: 5,
                     vertical: 5,
                   ),
                   child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: FittedBox(
-                          child: Text('${transactions[index].amount} Rs/-'),
+                    leading: Card(
+                      elevation: 8,
+                      child: Container(
+                        height: 60,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          color: Colors.blue[300],
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(7),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(6),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              FittedBox(
+                                child: Text(transactions[index]
+                                    .amount
+                                    .toStringAsFixed(2)),
+                              ),
+                              FittedBox(
+                                child: Text('Rs/-'),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
