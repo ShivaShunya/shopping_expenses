@@ -11,7 +11,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 600,
+      height: 360,
       child: _transactions.isEmpty
           ? Column(
               children: <Widget>[
@@ -38,48 +38,52 @@ class TransactionList extends StatelessWidget {
               itemCount: _transactions.length,
               itemBuilder: (itemContext, index) {
                 return Card(
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 15,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.brown,
-                            width: 2,
+                  color: Colors.white24,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 15,
                           ),
-                        ),
-                        padding: EdgeInsets.all(5),
-                        child: Text(
-                          _transactions[index].amount.toStringAsFixed(2) +
-                              ' Rs/-',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            _transactions[index].title,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            DateFormat().format(_transactions[index].date),
-                            style: TextStyle(
-                              color: Colors.grey,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.brown,
+                              width: 2,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                          padding: EdgeInsets.all(5),
+                          child: Text(
+                            _transactions[index].amount.toStringAsFixed(2) +
+                                ' Rs/-',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              _transactions[index].title,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              DateFormat().format(_transactions[index].date),
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
