@@ -41,7 +41,7 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 10,
-      margin: EdgeInsets.all(20),
+      margin: EdgeInsets.all(10),
       child: Container(
         height: 170,
         padding: EdgeInsets.all(10),
@@ -52,9 +52,9 @@ class Chart extends StatelessWidget {
             return ChartBar(
               day: value['day'],
               amount: value['amount'],
-              spendingPercentage: totalInAWeek > 0 
-                                  ? (value['amount'] as double) / totalInAWeek 
-                                  : 0,
+              spendingPercentage: totalInAWeek > 0
+                  ? (value['amount'] as double) / totalInAWeek
+                  : 0,
             );
           }).toList(),
         ),
