@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 
@@ -108,6 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscapeMOde =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     const double switchButtonHight = 40;
     final appbar = AppBar(
       title: Container(
@@ -141,70 +144,75 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              color: Colors.grey[200],
-              height: switchButtonHight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Card(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Card(
-                          color: Colors.grey[300],
-                          child: Text('Show Weekly Chart'),
-                        ),
-                        Switch(
-                          value: _showChart,
-                          onChanged: (val) {
-                            setState(() {
-                              _showChart = val;
-                            });
-                          },
-                        ),
-                      ],
+            if (isLandscapeMOde)
+              Container(
+                color: Colors.grey[200],
+                height: switchButtonHight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Card(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Card(
+                            color: Colors.grey[300],
+                            child: Text('Show Weekly Chart'),
+                          ),
+                          // Making Switch adaptive to both Android + iOS
+                          Switch.adaptive(
+                            value: _showChart,
+                            onChanged: (val) {
+                              setState(() {
+                                _showChart = val;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Card(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Card(
-                          color: Colors.grey[300],
-                          child: Text('Show Transactions'),
-                        ),
-                        Switch(
-                          value: !_showChart,
-                          onChanged: (val) {
-                            setState(() {
-                              _showChart = !val;
-                            });
-                          },
-                        ),
-                      ],
+                    Card(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Card(
+                            color: Colors.grey[300],
+                            child: Text('Show Transactions'),
+                          ),
+                          Switch(
+                            value: !_showChart,
+                            onChanged: (val) {
+                              setState(() {
+                                _showChart = !val;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            _showChart
-                ? Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appbar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        .35,
-                    child: Chart(_recentTransantions),
-                  )
-                : Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appbar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) - switchButtonHight,
-                    child: TransactionList(
-                      _transactions,
-                      _deleteTransactionEntry,
-                    ),
-                  ),
+            if (_showChart || !isLandscapeMOde)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appbar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    (isLandscapeMOde ? .6 : .35),
+                child: Chart(_recentTransantions),
+              ),
+            if (!_showChart || !isLandscapeMOde)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        appbar.preferredSize.height -
+                        MediaQuery.of(context).padding.top -
+                        (isLandscapeMOde ? switchButtonHight : 0)) *
+                    (isLandscapeMOde ? 1 : .65),
+                child: TransactionList(
+                  _transactions,
+                  _deleteTransactionEntry,
+                ),
+              ),
             // FloatingActionButton(
             //   onPressed: () {
             //     _startAddNewTransaction(context);
@@ -219,16 +227,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _startAddNewTransaction(context);
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.green,
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () {
+                _startAddNewTransaction(context);
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.green,
+            ),
     );
   }
 }
