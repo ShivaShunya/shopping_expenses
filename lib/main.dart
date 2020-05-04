@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
@@ -35,20 +35,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
-    // Transaction(
-    //   id: 1,
-    //   title: 'Shoe',
-    //   amount: 2000,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 2,
-    //   title: 'Weekly Groceries',
-    //   amount: 3500,
-    //   date: DateTime.now(),
-    // ),
-  ];
+  bool _showChart = false;
+  final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransantions {
     return _transactions.where((tx) {
@@ -120,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const double switchButtonHight = 40;
     final appbar = AppBar(
       title: Container(
         color: Colors.pink,
@@ -153,22 +142,69 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
-              height: (MediaQuery.of(context).size.height -
-                      appbar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  .35,
-              child: Chart(_recentTransantions),
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appbar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  .65,
-              child: TransactionList(
-                _transactions,
-                _deleteTransactionEntry,
+              color: Colors.grey[200],
+              height: switchButtonHight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Card(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Card(
+                          color: Colors.grey[300],
+                          child: Text('Show Weekly Chart'),
+                        ),
+                        Switch(
+                          value: _showChart,
+                          onChanged: (val) {
+                            setState(() {
+                              _showChart = val;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Card(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Card(
+                          color: Colors.grey[300],
+                          child: Text('Show Transactions'),
+                        ),
+                        Switch(
+                          value: !_showChart,
+                          onChanged: (val) {
+                            setState(() {
+                              _showChart = !val;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
+            _showChart
+                ? Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appbar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) *
+                        .35,
+                    child: Chart(_recentTransantions),
+                  )
+                : Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appbar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) - switchButtonHight,
+                    child: TransactionList(
+                      _transactions,
+                      _deleteTransactionEntry,
+                    ),
+                  ),
             // FloatingActionButton(
             //   onPressed: () {
             //     _startAddNewTransaction(context);
