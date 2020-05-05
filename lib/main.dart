@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 
@@ -19,7 +21,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return Platform.isIOS ? CupertinoApp(
+            title: 'Shopping & Expenses',
+      theme: CupertinoThemeData(
+      ),
+      home: MyHomePage(),
+    ) : MaterialApp(
       title: 'Shopping & Expenses',
       theme: ThemeData(
         primarySwatch: Colors.pink,
@@ -112,34 +119,53 @@ class _MyHomePageState extends State<MyHomePage> {
     final isLandscapeMOde =
         MediaQuery.of(context).orientation == Orientation.landscape;
     const double switchButtonHight = 40;
-    final appbar = AppBar(
-      title: Container(
-        color: Colors.pink,
-        height: 40,
-        width: 250,
-        child: Card(
-          color: Colors.pink,
-          elevation: 5,
-          child: Text(
-            'Shopping & Expenses',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-            ),
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _startAddNewTransaction(context),
-        ),
-      ],
-    );
 
-    return Scaffold(
-      appBar: appbar,
-      body: SingleChildScrollView(
+    final PreferredSizeWidget appbar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text(
+              'Shopping & Expenses',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _startAddNewTransaction(context),
+                ),
+              ],
+            ),
+          )
+        : AppBar(
+            title: Container(
+              color: Colors.pink,
+              height: 40,
+              width: 250,
+              child: Card(
+                color: Colors.pink,
+                elevation: 5,
+                child: Text(
+                  'Shopping & Expenses',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => _startAddNewTransaction(context),
+              ),
+            ],
+          );
+
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -179,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.grey[300],
                             child: Text('Show Transactions'),
                           ),
-                          Switch(
+                          Switch.adaptive(
                             value: !_showChart,
                             onChanged: (val) {
                               setState(() {
@@ -226,19 +252,30 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Platform.isIOS
-          ? Container()
-          : FloatingActionButton(
-              onPressed: () {
-                _startAddNewTransaction(context);
-              },
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              backgroundColor: Colors.green,
-            ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBody,
+            navigationBar: appbar,
+          )
+        : Scaffold(
+            appBar: appbar,
+            body: pageBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    onPressed: () {
+                      _startAddNewTransaction(context);
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+          );
   }
 }
