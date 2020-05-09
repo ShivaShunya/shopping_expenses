@@ -15,10 +15,43 @@ class NewTransaction extends StatefulWidget {
   _NewTransactionState createState() => _NewTransactionState();
 }
 
-class _NewTransactionState extends State<NewTransaction> {
+class _NewTransactionState extends State<NewTransaction> with WidgetsBindingObserver{
   final _titleInputController = TextEditingController();
   final _amountInputController = TextEditingController();
   DateTime _selectedDate;
+
+  // overridden just for understandig, can be used in different scenario
+  // gets called once when State<> objet is created 
+  @override
+  void initState() {
+    // ** as per new recommendation super.initStete() should be called first 
+    // added observer, when state changes didChangeAppLifecycleState will be called
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+  // overridden just for understandig, can be used in different scenario
+  // gets called when parent stateful widget changes
+  @override
+  void didUpdateWidget(NewTransaction oldWidget) {
+    // here you can comare 'oldWiget' with new widget 'widget'
+    // gets called when the widget attached to the state changes.
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('Add New Transaction State------->[$state]');
+  }
+  // overridden just for understandig, can be used in different scenario
+  @override
+  void dispose() {
+    // cleaning up is done here...like http connections for listeners may b for a chat app etc...
+    
+    // clear widgetbinding listener observer for avoiding memory leaks after 
+    // this widget is removed
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   void _onUserInput() {
     if (_titleInputController.text.isEmpty) {

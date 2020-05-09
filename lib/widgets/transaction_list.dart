@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
+import './transaction_item.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
@@ -16,14 +16,14 @@ class TransactionList extends StatelessWidget {
             builder: (ctx, constraints) {
               return Column(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
                     'No transactions added yet !',
                     style: Theme.of(context).textTheme.title,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
@@ -33,7 +33,7 @@ class TransactionList extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
@@ -47,74 +47,16 @@ class TransactionList extends StatelessWidget {
         : ListView.builder(
             itemCount: transactions.length,
             itemBuilder: (itemContext, index) {
-              return Card(
-                color: Colors.pink[100],
-                elevation: 3,
-                margin: EdgeInsets.symmetric(
-                  horizontal: 5,
-                  vertical: 5,
-                ),
-                child: ListTile(
-                  leading: Card(
-                    elevation: 8,
-                    child: Container(
-                      height: 60,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        color: Colors.blue[300],
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            FittedBox(
-                              child: Text(transactions[index]
-                                  .amount
-                                  .toStringAsFixed(2)),
-                            ),
-                            FittedBox(
-                              child: Text('Rs/-'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    transactions[index].title,
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMd().format(transactions[index].date),
-                  ),
-                  trailing: MediaQuery.of(context).orientation ==
-                          Orientation.landscape
-                      ? FlatButton.icon(
-                          onPressed: () {
-                            deleteTransactionEntry(transactions[index].id);
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.blueGrey,
-                          ),
-                          label: Text(
-                            'Delete',
-                            style: TextStyle(
-                              color: Colors.blueGrey,
-                            ),
-                          ),
-                        )
-                      : IconButton(
-                          icon: Icon(Icons.delete),
-                          color: Colors.blueGrey,
-                          onPressed: () {
-                            deleteTransactionEntry(transactions[index].id);
-                          },
-                        ),
-                ),
+              // key is passed here just for understanding or remember, no use in this widget
+              // key is most useful in statelfull widgets which are direct child of a list, in that
+              // case to when a list element is removed, flutter goes through the element tree and
+              // removes the element and state object that corresponds to the deleted widget (otherwise 
+              // flutter will not check 'key' configuration in a element of a widget and may attach this
+              // element to another widget and remove the element and state of that another widget instead)
+              return TransactionItem(
+                key: ValueKey(transactions[index].id),
+                transaction: transactions[index],
+                deleteTransactionEntry: deleteTransactionEntry,
               );
             },
           );

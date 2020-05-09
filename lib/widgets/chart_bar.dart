@@ -5,10 +5,12 @@ class ChartBar extends StatelessWidget {
   final double amount;
   final double spendingPercentage;
 
-  ChartBar(
-      {@required this.day,
-      @required this.amount,
-      @required this.spendingPercentage});
+  const ChartBar({
+    @required this.day,
+    @required this.amount,
+    @required this.spendingPercentage,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -54,7 +56,8 @@ class ChartBar extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: constraints.maxHeight * .5 * (1 - spendingPercentage),
+                      height:
+                          constraints.maxHeight * .5 * (1 - spendingPercentage),
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(220, 220, 220, 1),
                         borderRadius: BorderRadius.circular(10),

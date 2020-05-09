@@ -90,17 +90,17 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext ctx) {
         return AlertDialog(
-          title: Text("Delete Transaction Alert"),
-          content: Text("Please press 'Continue' to confirm..."),
+          title: const Text("Delete Transaction Alert"),
+          content: const Text("Please press 'Continue' to confirm..."),
           actions: [
             FlatButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
             ),
             FlatButton(
-              child: Text("Continue"),
+              child: const Text("Continue"),
               onPressed: () {
                 setState(() {
                   _transactions.removeWhere((tx) => tx.id == transactionId);
@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final PreferredSizeWidget appbar = Platform.isIOS
         ? CupertinoNavigationBar(
-            middle: Text(
+            middle: const Text(
               'Shopping & Expenses',
               style: TextStyle(
                 color: Colors.white,
@@ -147,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Card(
                 color: Colors.pink,
                 elevation: 5,
-                child: Text(
+                child: const Text(
                   'Shopping & Expenses',
                   style: TextStyle(
                     color: Colors.white,
@@ -203,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         children: <Widget>[
                           Card(
                             color: Colors.grey[300],
-                            child: Text('Show Transactions'),
+                            child: const Text('Show Transactions'),
                           ),
                           Switch.adaptive(
                             value: !_showChart,
